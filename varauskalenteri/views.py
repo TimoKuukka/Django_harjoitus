@@ -1,5 +1,4 @@
-from importlib.resources import contents
-from multiprocessing import context
+from pickle import FALSE
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -13,11 +12,23 @@ def tapahtumalistaus(request):
     }
     return render(request, 'listaus.html', context)
 
+
 def varaa_tapahtuma(request, id):
+    tapahtuma = Tapahtuma.objects.get(id=id)
+    context = {'tapahtuma': tapahtuma}
+
     if request.method == "POST":
-        tapahtuma.varaa(request.user)
-        context = ["varattu"] = True
-    else:
+        toiminto = reguest.POST.get("toiminto", "varaa")
+        if toiminto == "varaa":
+            varattu = tapahtuma.varaa(request.user)
+            context["varattu"] = varattu
+        elif toiminto == "peru":
+            tapahtuma.poista_varaus(reguest.user)
+            context["varattu"] = False
+        else:
+            raise valueError (f"Tuntematon toiminto: {toiminto}")
+    else:   # GET
         varattu = tapahtuma.onko_varattu(request.user)
-        context["varattu"] = False
-    return render(request, "varaa.html", context)
+        context["varattu"] = varattu
+
+    return render(request, 'varaa.html', context)
