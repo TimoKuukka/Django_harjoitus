@@ -1,4 +1,3 @@
-from pickle import FALSE
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -18,16 +17,16 @@ def varaa_tapahtuma(request, id):
     context = {'tapahtuma': tapahtuma}
 
     if request.method == "POST":
-        toiminto = reguest.POST.get("toiminto", "varaa")
+        toiminto = request.POST.get("toiminto", "varaa")
         if toiminto == "varaa":
             varattu = tapahtuma.varaa(request.user)
             context["varattu"] = varattu
         elif toiminto == "peru":
-            tapahtuma.poista_varaus(reguest.user)
+            tapahtuma.poista_varaus(request.user)
             context["varattu"] = False
         else:
-            raise valueError (f"Tuntematon toiminto: {toiminto}")
-    else:   # GET
+            raise ValueError(f"Tuntematon toiminto: {toiminto}")
+    else:  # GET
         varattu = tapahtuma.onko_varattu(request.user)
         context["varattu"] = varattu
 

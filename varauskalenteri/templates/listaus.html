@@ -3,8 +3,8 @@
     <ul>
         {% for tapahtuma in tapahtumat %}
             <li>
-                <a href="">{{tapahtuma.id}}">{{tapahtuma}}</a>
-                </li>
+                <a href="{% url 'varaus' tapahtuma.id %}">{{tapahtuma}}</a>
+            </li>
         {% endfor %}
     </ul>
 </html>
